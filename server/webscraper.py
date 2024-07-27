@@ -1,4 +1,3 @@
-from flask import Flask, jsonify
 import requests
 from bs4 import BeautifulSoup
 
@@ -47,26 +46,19 @@ def get_prayer_times():
             prayer_name = cells[0].get_text(strip=True)
             start_time = cells[1].get_text(strip=True)
             jamaat_time = cells[2].get_text(strip=True)
-            begin_times.append({'prayer': prayer_name, 'time': start_time})
-            jammah_times.append({'prayer': prayer_name, 'time': jamaat_time})
+            begin_times.append((prayer_name, start_time))
+            jammah_times.append((prayer_name, jamaat_time))
 
     return {'begin_times': begin_times, 'jammah_times': jammah_times}
 
-def create_app():
-    app = Flask(__name__)
+# Call the function and get the prayer times
+prayer_times = get_prayer_times()
 
-    @app.route('/api/begin_times', methods=['GET'])
-    def begin_times():
-        times = get_prayer_times()
-        return jsonify(times['begin_times'])
+# Print the prayer times
 
-    @app.route('/api/jammah_times', methods=['GET'])
-    def jammah_times():
-        times = get_prayer_times()
-        return jsonify(times['jammah_times'])
+for prayer in prayer_times['begin_times']:
+    print(f"{prayer[0]}: {prayer[1]}")
+    print("\n")
 
-    return app
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
+for prayer in prayer_times['jammah_times']:
+    print(f"{prayer[0]}: {prayer[1]}")
