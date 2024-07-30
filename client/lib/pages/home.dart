@@ -6,26 +6,36 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          Container(
-            color: Color(0xFF631515),
-            height: 40.0,  // Adjust the height as needed
+          // Top section background
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 150, // Adjust the height as needed
+            child: Container(
+              color: Color(0xFF631515), // Use the desired color
+            ),
           ),
-          Expanded(
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text('Home Page'),
-                backgroundColor: Color(0xFF631515),
-              ),
-              body: Center(
-                child: Text('Welcome to the Home Page!'),
+          // Logo in the center of the top section
+          Positioned(
+            top: -85, // Adjust the position as needed
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Image.asset(
+                'assets/icons/soton_isoc_logo.png', // Replace with your logo asset
+                height: 350, // Adjust the size as needed
               ),
             ),
           ),
-          Container(
-            color: Color(0xFF631515),
-            height: 90.0,  // Adjust the height as needed
+          // Rest of the content
+          Positioned.fill(
+            top: 150, // This ensures the main content starts below the top section
+            child: Center(
+              child: Text('Your main content goes here'),
+            ),
           ),
         ],
       ),
@@ -34,16 +44,7 @@ class HomePage extends StatelessWidget {
 }
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-    );
-  }
+  runApp(MaterialApp(
+    home: HomePage(),
+  ));
 }
