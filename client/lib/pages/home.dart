@@ -1,7 +1,52 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../models/time.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Time> prayerTimes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBeginTimes();
+  }
+
+  Future<void> fetchBeginTimes() async {
+    try {
+      // Use '10.0.2.2' for Android emulator, '127.0.0.1' for iOS simulator, or your machine's IP for a physical device
+      var response = await http.get(Uri.http('10.0.2.2:5000', 'api/begin_times'));
+
+      if (response.statusCode == 200) {
+        // Print the raw JSON for debugging
+        print('Raw JSON: ${response.body}');
+
+        // Decode JSON directly into a List
+        List jsonData = jsonDecode(response.body);
+
+        setState(() {
+          prayerTimes.clear(); // Clear existing data to avoid duplicates
+          for (var eachTime in jsonData) {
+            final prayerTime = Time.fromJson(eachTime);
+            prayerTimes.add(prayerTime);
+          }
+        });
+
+        print('Prayer times fetched: ${prayerTimes.length}');
+      } else {
+        print('Failed to load prayer times. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching prayer times: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +91,21 @@ class HomePage extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xFF631515), // Adjust the color as needed
                         borderRadius: BorderRadius.circular(20), // Adjust the radius as needed
+                      ),
+                      child: prayerTimes.isEmpty
+                          ? const Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                        itemCount: prayerTimes.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              '${prayerTimes[index].time}',
+                              style: const TextStyle(
+                                color: Colors.white, // Set text color
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -108,7 +168,6 @@ class HomePage extends StatelessWidget {
                       height: 150,
                       decoration: BoxDecoration(
                         color: const Color(0xFF631515), // Adjust the color as needed
-
                       ),
                     ),
                   ),
@@ -116,8 +175,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
-
         ],
       ),
     );

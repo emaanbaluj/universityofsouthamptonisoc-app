@@ -28,7 +28,8 @@ def get_prayer_times():
     tbody = table.find('tbody')
     rows = tbody.find_all('tr') if tbody else table.find_all('tr')
 
-    for row in rows:
+    # Skip the first row
+    for row in rows[1:]:
         cells = row.find_all(['th', 'td'])
         if len(cells) >= 3:
             prayer_name = cells[0].get_text(strip=True)

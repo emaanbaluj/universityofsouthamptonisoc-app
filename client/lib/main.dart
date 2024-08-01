@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:client/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'models/time.dart'; // Ensure this path is correct based on your project structure
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,9 +13,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage()
+      home: HomePage(), // Ensure HomePage is correctly implemented
     );
   }
 }
