@@ -51,7 +51,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Stack(
         children: [
           // Top section background
@@ -78,34 +77,43 @@ class _HomePageState extends State<HomePage> {
           ),
           // Main content
           Positioned.fill(
-            top: 280, // This ensures the main content starts below the top section
+            top: 280,
             child: Column(
               children: [
                 Expanded(
                   child: Center(
                     child: Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: const EdgeInsets.only(top: 50.0), // Adjust the top padding as needed
-                      width: 350, // Increase the width slightly
+                      padding: const EdgeInsets.only(top: 0),
+                      width: 350,
                       height: 300,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF631515), // Adjust the color as needed
-                        borderRadius: BorderRadius.circular(20), // Adjust the radius as needed
+                        color: const Color(0xFF631515),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      child: prayerTimes.isEmpty
-                          ? const Center(child: CircularProgressIndicator())
-                          : ListView.builder(
-                        itemCount: prayerTimes.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                              '${prayerTimes[index].time}',
-                              style: const TextStyle(
-                                color: Colors.white, // Set text color
+                      child: Transform.translate(
+                        offset: Offset(0, -20), // Move text up by 10 pixels
+                        child: prayerTimes.isEmpty
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: prayerTimes.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 0.0),
+                              child: ListTile(
+                                dense: true,
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 138.0),
+                                title: Text(
+                                  '${prayerTimes[index].time}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22.0,
+                                  ),
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
