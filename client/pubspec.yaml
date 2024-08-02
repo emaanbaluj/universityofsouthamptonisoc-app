@@ -25,3 +25,8 @@ flutter:
   assets:
     - assets/icons/soton_isoc_logo.png
     - assets/icons/soton_isoc_logo2.webp
+
+  fonts:
+    - family: Helvetica
+      fonts:
+        - asset: assets/fonts/Helvetica.ttf
