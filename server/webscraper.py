@@ -1,6 +1,42 @@
 import requests
 from bs4 import BeautifulSoup
 
+import requests
+from bs4 import BeautifulSoup
+
+
+def get_islamic_date():
+    # URL of the website to scrape
+    url = 'https://www.southamptonisoc.org/'
+
+    # Send a GET request to the URL
+    response = requests.get(url)
+
+    # Raise an exception if the request was unsuccessful
+    response.raise_for_status()
+
+    # Get the content of the webpage
+    webpage_content = response.content
+
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(webpage_content, 'html.parser')
+
+    # Navigate through the nested span elements to find the date
+    date_span = soup.find('h4', class_='font_4 wixui-rich-text__text', style="font-size:18px; text-align:center;")
+
+    # Extract the text from the span element if found
+    if date_span:
+        islamic_date = date_span.get_text(strip=True)
+        print(islamic_date)
+        return islamic_date
+    else:
+        print("Date not found.")
+        return None
+
+
+# Call the function to get the Islamic date
+get_islamic_date()
+
 def get_prayer_times():
     # URL of the iframe content (based on the src attribute in the provided HTML)
     iframe_url = 'https://www.swindonmasjid.com/wp-content/uploads/st.php?source=homepage'
