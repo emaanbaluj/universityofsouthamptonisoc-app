@@ -35,8 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchJammahTimes() async {
     try {
-      var response = await http.get(
-          Uri.http('10.0.2.2:5000', 'api/jammah_times'));
+      var response = await http.get(Uri.http('10.0.2.2:5000', 'api/jammah_times'));
 
       if (response.statusCode == 200) {
         List jsonData = jsonDecode(response.body);
@@ -52,8 +51,7 @@ class _HomePageState extends State<HomePage> {
       } else {
         setState(() {
           isLoading = false;
-          errorMessage =
-          'Failed to load Jammah times. Status code: ${response.statusCode}';
+          errorMessage = 'Failed to load Jammah times. Status code: ${response.statusCode}';
         });
       }
     } catch (e) {
@@ -66,8 +64,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchBeginTimes() async {
     try {
-      var response = await http.get(
-          Uri.http('10.0.2.2:5000', 'api/begin_times'));
+      var response = await http.get(Uri.http('10.0.2.2:5000', 'api/begin_times'));
 
       if (response.statusCode == 200) {
         List jsonData = jsonDecode(response.body);
@@ -83,8 +80,7 @@ class _HomePageState extends State<HomePage> {
       } else {
         setState(() {
           isLoading = false;
-          errorMessage =
-          'Failed to load Begin times. Status code: ${response.statusCode}';
+          errorMessage = 'Failed to load Begin times. Status code: ${response.statusCode}';
         });
       }
     } catch (e) {
@@ -129,14 +125,13 @@ class _HomePageState extends State<HomePage> {
           ),
           // Main content
           Positioned.fill(
-            top: 260, // Adjusted top padding for main content
+            top: 290, // Adjusted top padding for main content
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0, vertical: 0.0),
-                width: 335,
+                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 0.0),
+                width: 330,
                 // Adjust width to make the box smaller
-                height: 285,
+                height: 255,
                 decoration: BoxDecoration(
                   color: const Color(0xFF631515),
                   borderRadius: BorderRadius.circular(20),
@@ -159,21 +154,21 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     // Headers
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Spacing between items
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // Spacing between items
                       children: [
                         Expanded(
                           flex: 3,
                           child: Container(
                             alignment: Alignment.centerLeft, // Align to the left
                             child: const Padding(
-                              padding: EdgeInsets.only(left: 27.0), // Specific padding for precise position
+                              padding: EdgeInsets.only(left: 27.0), // Reduced padding
                               child: Text(
                                 'Ṣalāh',
                                 style: TextStyle(
                                   fontFamily: 'Helvetica',
                                   color: Colors.white,
                                   fontSize: 15.0,
-
                                 ),
                               ),
                             ),
@@ -189,7 +184,6 @@ class _HomePageState extends State<HomePage> {
                                 fontFamily: 'Helvetica',
                                 color: Colors.white,
                                 fontSize: 15.0,
-
                               ),
                             ),
                           ),
@@ -199,14 +193,13 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             alignment: Alignment.centerRight, // Align to the right
                             child: const Padding(
-                              padding: EdgeInsets.only(right: 12.0), // Specific padding for precise position
+                              padding: EdgeInsets.only(right: 12.0), // Reduced padding
                               child: Text(
                                 'Jama’ah',
                                 style: TextStyle(
                                   fontFamily: 'Helvetica',
                                   color: Colors.white,
                                   fontSize: 15.0,
-
                                 ),
                               ),
                             ),
@@ -214,17 +207,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5), // Reduced space between headers and content
                     // Space between headers and content
                     // Prayer Times
-                    ...prayerNames
-                        .asMap()
-                        .entries
-                        .map((entry) {
+                    ...prayerNames.asMap().entries.map((entry) {
                       final index = entry.key;
                       final prayerName = entry.value;
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        padding: const EdgeInsets.symmetric(vertical: 2.0), // Reduced padding
                         child: Row(
                           children: [
                             // Prayer Name with custom margin
@@ -248,8 +238,7 @@ class _HomePageState extends State<HomePage> {
                               flex: 3,
                               child: Center(
                                 child: Text(
-                                  beginTimes.length > index ? beginTimes[index]
-                                      .time : 'N/A',
+                                  beginTimes.length > index ? beginTimes[index].time : 'N/A',
                                   style: const TextStyle(
                                     fontFamily: 'Helvetica',
                                     color: Colors.white,
@@ -264,9 +253,11 @@ class _HomePageState extends State<HomePage> {
                               child: Align(
                                 alignment: Alignment.center, // Change to center alignment
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 10.0), // Add padding to adjust position
+                                  padding: EdgeInsets.only(left: 10.0), // Adjust padding
                                   child: Text(
-                                    jammahTimes.length > index ? jammahTimes[index].time : 'N/A',
+                                    jammahTimes.length > index
+                                        ? jammahTimes[index].time
+                                        : 'N/A',
                                     style: const TextStyle(
                                       fontFamily: 'Helvetica',
                                       color: Colors.white,
