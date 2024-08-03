@@ -15,6 +15,16 @@ class _HomePageState extends State<HomePage> {
   List<Time> jammahTimes = [];
   bool isLoading = true; // To manage loading state
   String errorMessage = ''; // To display error messages
+  List<String> prayerNames = ['Fajr', 'Zuhr', 'Asr', 'Maghrib', 'Isha'];
+
+  // Add a list of custom margins for each prayer name
+  List<EdgeInsets> prayerMargins = [
+    EdgeInsets.only(left: 25.0), // Fajr
+    EdgeInsets.only(left: 21.0), // Zuhr
+    EdgeInsets.only(left: 26.0), // Asr
+    EdgeInsets.only(left: 0.0), // Maghrib
+    EdgeInsets.only(left: 21.0), // Isha
+  ];
 
   @override
   void initState() {
@@ -25,10 +35,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchJammahTimes() async {
     try {
-      var response = await http.get(Uri.http('10.0.2.2:5000', 'api/jammah_times'));
+      var response = await http.get(
+          Uri.http('10.0.2.2:5000', 'api/jammah_times'));
 
       if (response.statusCode == 200) {
-        print('Raw JSON: ${response.body}');
         List jsonData = jsonDecode(response.body);
 
         setState(() {
@@ -39,29 +49,27 @@ class _HomePageState extends State<HomePage> {
           }
           isLoading = false; // Stop loading when data is fetched
         });
-        print('Jammah times fetched: ${jammahTimes.length}');
       } else {
         setState(() {
           isLoading = false;
-          errorMessage = 'Failed to load Jammah times. Status code: ${response.statusCode}';
+          errorMessage =
+          'Failed to load Jammah times. Status code: ${response.statusCode}';
         });
-        print(errorMessage);
       }
     } catch (e) {
       setState(() {
         isLoading = false;
         errorMessage = 'Error fetching Jammah times: $e';
       });
-      print(errorMessage);
     }
   }
 
   Future<void> fetchBeginTimes() async {
     try {
-      var response = await http.get(Uri.http('10.0.2.2:5000', 'api/begin_times'));
+      var response = await http.get(
+          Uri.http('10.0.2.2:5000', 'api/begin_times'));
 
       if (response.statusCode == 200) {
-        print('Raw JSON: ${response.body}');
         List jsonData = jsonDecode(response.body);
 
         setState(() {
@@ -72,20 +80,18 @@ class _HomePageState extends State<HomePage> {
           }
           isLoading = false; // Stop loading when data is fetched
         });
-        print('Begin times fetched: ${beginTimes.length}');
       } else {
         setState(() {
           isLoading = false;
-          errorMessage = 'Failed to load Begin times. Status code: ${response.statusCode}';
+          errorMessage =
+          'Failed to load Begin times. Status code: ${response.statusCode}';
         });
-        print(errorMessage);
       }
     } catch (e) {
       setState(() {
         isLoading = false;
         errorMessage = 'Error fetching Begin times: $e';
       });
-      print(errorMessage);
     }
   }
 
@@ -99,22 +105,23 @@ class _HomePageState extends State<HomePage> {
             top: 0,
             left: 0,
             right: 0,
-            height: 150, // Adjust the height as needed
+            height: 150,
             child: Container(
               color: const Color(0xFF631515), // Use the desired color
             ),
           ),
           // Logo in the center of the top section
           Positioned(
-            top: 0, // Adjust the position as needed
+            top: 0,
             left: 0,
             right: 0,
             child: Transform.translate(
-              offset: Offset(0, -50), // Move the logo upwards by 50 pixels
+              offset: const Offset(0, -75),
+              // Move the logo upwards by 75 pixels
               child: Center(
                 child: Image.asset(
-                  'assets/icons/soton_isoc_logo.png', // Replace with your logo asset
-                  height: 300, // Adjust the size as needed
+                  'assets/icons/soton_isoc_logo.png',
+                  height: 350, // Adjust the size as needed
                   width: double.maxFinite,
                 ),
               ),
@@ -122,156 +129,169 @@ class _HomePageState extends State<HomePage> {
           ),
           // Main content
           Positioned.fill(
-            top: 200, // Adjusted top padding for main content
-            child: Column(
-              children: [
-                // Error message display
-                if (errorMessage.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Text(
-                      errorMessage,
-                      style: const TextStyle(color: Colors.red, fontSize: 16),
-                      textAlign: TextAlign.center,
+            top: 260, // Adjusted top padding for main content
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0, vertical: 0.0),
+                width: 335,
+                // Adjust width to make the box smaller
+                height: 285,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF631515),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : errorMessage.isNotEmpty
+                    ? Center(
+                  child: Text(
+                    errorMessage,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                // Display Begin Times
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 0),
-                      width: 350,
-                      height: 300,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF631515),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Transform.translate(
-                        offset: Offset(0, -25), // Move text up by 10 pixels
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : Column(
+                )
+                    : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Headers
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Spacing between items
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            alignment: Alignment.centerLeft, // Align to the left
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 27.0), // Specific padding for precise position
+                              child: Text(
+                                'Ṣalāh',
+                                style: TextStyle(
+                                  fontFamily: 'Helvetica',
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            alignment: Alignment.center, // Center alignment
+                            child: const Text(
+                              'Begins',
+                              style: TextStyle(
+                                fontFamily: 'Helvetica',
+                                color: Colors.white,
+                                fontSize: 15.0,
+
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            alignment: Alignment.centerRight, // Align to the right
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 12.0), // Specific padding for precise position
+                              child: Text(
+                                'Jama’ah',
+                                style: TextStyle(
+                                  fontFamily: 'Helvetica',
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    // Space between headers and content
+                    // Prayer Times
+                    ...prayerNames
+                        .asMap()
+                        .entries
+                        .map((entry) {
+                      final index = entry.key;
+                      final prayerName = entry.value;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Row(
                           children: [
+                            // Prayer Name with custom margin
                             Expanded(
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: beginTimes.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 0.0),
-                                    child: ListTile(
-                                      dense: true,
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 138.0),
-                                      title: Text(
-                                        '${beginTimes[index].time}',
-                                        style: const TextStyle(
-                                          fontFamily: 'Helvetica',
-                                          color: Colors.white,
-                                          fontSize: 25.0,
-                                        ),
-                                      ),
+                              flex: 3,
+                              child: Container(
+                                margin: prayerMargins[index],
+                                child: Text(
+                                  prayerName,
+                                  style: const TextStyle(
+                                    fontFamily: 'Helvetica',
+                                    color: Colors.white,
+                                    fontSize: 24.0,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ),
+                            // Begin Time
+                            Expanded(
+                              flex: 3,
+                              child: Center(
+                                child: Text(
+                                  beginTimes.length > index ? beginTimes[index]
+                                      .time : 'N/A',
+                                  style: const TextStyle(
+                                    fontFamily: 'Helvetica',
+                                    color: Colors.white,
+                                    fontSize: 24.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Jammah Time
+                            Expanded(
+                              flex: 3,
+                              child: Align(
+                                alignment: Alignment.center, // Change to center alignment
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10.0), // Add padding to adjust position
+                                  child: Text(
+                                    jammahTimes.length > index ? jammahTimes[index].time : 'N/A',
+                                    style: const TextStyle(
+                                      fontFamily: 'Helvetica',
+                                      color: Colors.white,
+                                      fontSize: 24.0,
                                     ),
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  ),
+                      );
+                    }).toList(),
+                  ],
                 ),
-                // Display Jammah Times
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 0),
-                      width: 350,
-                      height: 300,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF631515),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Transform.translate(
-                        offset: Offset(0, -335), // Move text up by 10 pixels
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : Column(
-                          children: [
-                            Expanded(
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: jammahTimes.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 0.0),
-                                    child: ListTile(
-                                      dense: true,
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 138.0),
-                                      title: Text(
-                                        '${jammahTimes[index].time}',
-                                        style: const TextStyle(
-                                          fontFamily: 'Helvetica',
-                                          color: Colors.white,
-                                          fontSize: 25.0,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
+          // Footer Section
           Positioned(
-            top: 510, // Adjust this value to align properly
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  width: 350,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF631515),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 650, // Adjust this value to align properly
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  width: 350,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0, // Align at the bottom of the screen
+            bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              height: 150,
+              height: 100,
               color: const Color(0xFF631515),
             ),
           ),
